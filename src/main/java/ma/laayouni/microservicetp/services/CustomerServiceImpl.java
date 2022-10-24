@@ -5,11 +5,11 @@ import ma.laayouni.microservicetp.dtos.CustomerResponseDTO;
 import ma.laayouni.microservicetp.entites.Customer;
 import ma.laayouni.microservicetp.mappers.CustomerMapper;
 import ma.laayouni.microservicetp.repositories.CustomerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -29,28 +29,42 @@ public class CustomerServiceImpl implements CustomerService {
         //customer.setEmail(customerRequestDTO.getEmail());
         //customer.setName(customerRequestDTO.getName());
 
+        Customer customer = customerMapper.customerRequestDTOToCustomer(customerRequestDTO);
         Customer saveCustomer= customerRepository.save(customer);
 
-        CustomerResponseDTO customerResponseDTO=new CustomerResponseDTO();
-        customerResponseDTO.setId(saveCustomer.getId());
-        customerResponseDTO.setEmail(saveCustomer.getEmail());
-        customerResponseDTO.setName(saveCustomer.getName());
+        /**
+         * Mapping object
+         */
+        //CustomerResponseDTO customerResponseDTO=new CustomerResponseDTO();
+        //customerResponseDTO.setId(saveCustomer.getId());
+        //customerResponseDTO.setEmail(saveCustomer.getEmail());
+        //customerResponseDTO.setName(saveCustomer.getName());
 
+        CustomerResponseDTO customerResponseDTO = customerMapper.customerToCustomerResponseDTO(saveCustomer)
         return customerResponseDTO;
     }
 
     @Override
     public CustomerResponseDTO getCustomer(String id) {
-        return null;
+        Customer customer=customerRepository.findById(id).get();
+        return customerMapper.customerToCustomerResponseDTO(customer);
     }
 
     @Override
     public CustomerResponseDTO update(CustomerRequestDTO customerRequestDTO) {
-        return null;
+        Customer customer= customerMapper.customerRequestDTOToCustomer(customerRequestDTO);
+        Customer updatedCustomer=customerRepository.save(customer);
+
+        return customerMapper.customerToCustomerResponseDTO(updatedCustomer);
     }
 
     @Override
     public List<CustomerResponseDTO> listCustomers() {
-        return null;
+        List<Customer> customers=customerRepository.findAll();
+        List<CustomerResponseDTO> customerResponseDTOS=
+                customers.stream()
+                        .map(customer -> customerMapper.customerToCustomerResponseDTO(customer)
+                        ).collect(Collectors.toList());
+        return customerResponseDTOS;
     }
 }
