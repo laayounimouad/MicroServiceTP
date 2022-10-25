@@ -21,6 +21,7 @@ public class MicroServiceTpApplication {
             customerService.save(new CustomerRequestDTO("C01","name1","mail@email.com"));
             customerService.save(new CustomerRequestDTO("C02","name2","mail@email.com"));
             customerService.save(new CustomerRequestDTO("C03","name3","mail@email.com"));
+            customerService.save(new CustomerRequestDTO("C03","name3","mail@email.com"));
          };
     }
 
