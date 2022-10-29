@@ -1,5 +1,6 @@
 package ma.laayouni.microservicetp.web;
 
+import lombok.AllArgsConstructor;
 import ma.laayouni.microservicetp.dtos.CustomerRequestDTO;
 import ma.laayouni.microservicetp.dtos.CustomerResponseDTO;
 import ma.laayouni.microservicetp.services.CustomerService;
@@ -9,19 +10,17 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+@AllArgsConstructor
 public class CustomerRestAPI {
     private CustomerService customerService;
 
-    public CustomerRestAPI(CustomerService customerService) {
-        this.customerService = customerService;
-    }
     @GetMapping(path = "/customers")
      public List<CustomerResponseDTO> allCustomers(){
         return customerService.listCustomers();
      }
 
     @PostMapping(path = "/customers")
-     public CustomerResponseDTO save(CustomerRequestDTO customerRequestDTO){
+     public CustomerResponseDTO save(@RequestBody CustomerRequestDTO customerRequestDTO){
         return customerService.save(customerRequestDTO);
      }
 
@@ -29,4 +28,5 @@ public class CustomerRestAPI {
      public CustomerResponseDTO getCustomer(@PathVariable String id){
         return customerService.getCustomer(id);
      }
+
 }
