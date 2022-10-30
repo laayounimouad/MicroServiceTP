@@ -51,9 +51,25 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public List<InvoiceResponseDTO> invoicesByCustomerId(String customerId) {
         List<Invoice> invoices = invoiceRepository.findByCustomerId(customerId);
+
+        for (Invoice invoice : invoices) {
+            Customer customer=customerRestClient.getCustomer(invoice.getCustomerId());
+            invoice.setCustomer(customer);
+        }
+
         return invoices
                 .stream()
                 .map(i -> invoiceMapper.fromInvoice(i))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<InvoiceResponseDTO> allInvoices() {
+        List<Invoice> invoices=invoiceRepository.findAll();
+        for (Invoice invoice : invoices) {
+             Customer customer=customerRestClient.getCustomer(invoice.getCustomerId());
+                invoice.setCustomer(customer);
+        }
+        return invoices.stream().map(i->invoiceMapper.fromInvoice(i)).collect(Collectors.toList());
     }
 }

@@ -22,7 +22,9 @@ public class BillingServiceTpApplication {
     @Bean
     CommandLineRunner commandLineRunner(InvoiceService invoiceService){
         return args -> {
-          invoiceService.save(new InvoiceRequestDTO(BigDecimal.valueOf(7600),"C01"));
+            invoiceService.save(new InvoiceRequestDTO(BigDecimal.valueOf(7600),"C01"));
+            invoiceService.save(new InvoiceRequestDTO(BigDecimal.valueOf(8600),"C02"));
+            invoiceService.save(new InvoiceRequestDTO(BigDecimal.valueOf(9600),"C01"));
         };
     }
 }
